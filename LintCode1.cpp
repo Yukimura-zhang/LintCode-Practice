@@ -32,6 +32,10 @@ int LintCode1(int a,int b){
 /*计算出n阶乘中尾部零的个数*/
 int LintCode2(int n)
 {
+	/* Your code ran too much time than we expected. Check your time complexity.
+	 * Time limit exceeded usually caused by infinite loop
+	 * if your time complexity is the best.*/
+#if 0
 	/*
 	 * 0! = 1没有0，5! = 5 * 4 * 3 * 2 * 1，包含5*2，一定有0；
 	 * 最小为5时，尾数第一次出现0；
@@ -47,6 +51,14 @@ int LintCode2(int n)
 			num++;
 			j /= 5;
 		}
+	}
+	return num;
+#endif
+
+	int num = 0;
+	while(n > 4){
+	   num += n / 5;
+	   n /= 5;
 	}
 
 	return num;
