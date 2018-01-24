@@ -13,7 +13,7 @@ int main(int argc,char *argv[])
 	c = LintCode1(a,b);
 	std::cout << "LintCode1 a + b = " << c << std::endl;
 
-	a = 100;
+	a = 36;
 	c = LintCode2(a);
 	std::cout << "LintCode2 c = " << c << std::endl;
 
