@@ -15,6 +15,9 @@ int LintCode1(int a,int b);
 /*计算出n阶乘中尾部零的个数*/
 int LintCode2(int n);
 
+/*计算数字k在0到n中的出现的次数，k可能是0~9的一个值*/
+int LintCode3(int n,int k);
+
 
 
 

@@ -70,4 +70,53 @@ int LintCode2(int n)
 	return num;
 }
 
+/*计算数字k在0到n中的出现的次数，k可能是0~9的一个值*/
+int LintCode3(int n,int k)
+{
+	/*
+	 * 假设有一个4位数N=ABCD（3456），我们现在来考虑B位上出现4的次数，
+	 * 分析完它，就可以用同样的方法去计算ACD位上出现4的次数。
+	 *  第一种情况：当B小于4时，假设是A3CD，则4出现在B位上的次数只能由A位决定(A*10)
+	 *  第二种情况：当B等于4时，假设是A4CD，则4出现在B位上的次数是A位(A*10)+CD+1；
+	 *  代表A4CD 和 A400
+	 *  第三种情况：当B大于4时，假设是A5CD，则4出现在B位上的次数是A位(A + 1)*10；
+	 *  总结一下：
+	 *  当某一位的数字小于i时，该位出现i的次数为：更高位数字x当前位数
+	 *  当某一位的数字等于i时，该位出现i的次数为：更高位数字x当前位数+低位数字+1
+	 *  当某一位的数字大于i时，该位出现i的次数为：(更高位数字+1)x当前位数
+	 */
+
+	int high = 0 ,cur = 0, low = 0,cnt = 0,base = 1;
+
+	if(n == k)
+		return 1;
+	else if(n < k)
+		return 0;
+	else{
+		/*
+		 * base:1,10,100,1000...
+		 * 怎样从个位到X位逐个取出高，当前，低位
+		 */
+		while(n / base > 0){
+			high = n / (base * 10);
+			cur = n / base % 10;
+			low = n - (n/base) * base;
+
+			if (cur < k)
+				cnt += high * base;
+			else if (cur == k)
+				cnt += high * base + low + 1;
+			else{
+				//k为0的时候需要特殊处理,
+				if(!k && !high)
+					break;
+				cnt += (high + 1) * base;
+			}
+			base *= 10;
+		}
+	}
+
+	return cnt;
+}
+
 

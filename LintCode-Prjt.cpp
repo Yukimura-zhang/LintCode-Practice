@@ -17,6 +17,11 @@ int main(int argc,char *argv[])
 	c = LintCode2(a);
 	std::cout << "LintCode2 c = " << c << std::endl;
 
+	a = 21;
+	b = 1;
+	c = LintCode3(a,b);
+	std::cout << "LintCode3 c = " << c << std::endl;
+
 	return 0;
 }
 
