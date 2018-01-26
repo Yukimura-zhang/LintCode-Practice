@@ -143,15 +143,37 @@ int LintCode4(int n)
 	int times2 = 0,times3 = 0,times5 = 0;
 	for(int i = 1; i < n; i++){
 #if 0
-		ugly[i] = min3(times2*2,times3*3,times5*5);
+		/*ugly[i] = min3(times2*2,times3*3,times5*5);
 		if(ugly[i] == times2*2)
 			times2++;
 		else if(ugly[i] == times3*3)
 			times3++;
 		else
+			times5++;*/
+
+		ugly[i] = min3(times2*2,times3*3,times5*5);
+		if(ugly[i] == times2*2)
+			times2++;
+		if(ugly[i] == times3*3)
+			times3++;
+		if(ugly[i] == times5*5)
 			times5++;
 #endif
-		/*请思考注释的方法为何错误*/
+		/*
+		 * 请思考注释的方法为何错误？
+		 * 首先是丑数的含义，丑数是2/3/5的倍数，但2/3/5的倍数不一定是丑数，比如14
+		 * 丑数的因子只能有2，3，5，注释的方法把times单纯当作倍数来算，这是错误一；
+		 * 其次，为什么要用if...if...if,而不是if...else if...else?
+		 * 运算原理是这样的，任何一个丑数 * 2/3/5之后会得一个新的丑数，假设1为U1,
+		 * 明显U2 = min3(U1*2,U1*3,U1*5)，U2 = U1*2，
+		 * 那么U3 = min3(U2*2,U1*3,U1*5)，U3 = U1*3；
+		 * 那么U4 = min3(U2*2,U2*3,U1*5)，U4 = U2*2；
+		 * 那么U5 = min3(U3*2,U2*3,U1*5)，U5 = U1*5；
+		 * 那么U6 = min3(U3*2,U2*3,U2*5)，U6 = U3*2 = U2*3；
+		 * 那么U7 = min3(U4*2,U3*3,U2*5)，U7 = U4*2；
+		 * 看U6和U7，就明白为什么用if...if...if;
+		 * 然后times2/3/5其实表示当前最小U应该是用第几个U和2/3/5相乘来取最小值
+		 */
 		ugly[i] = min3(ugly[times2]*2,ugly[times3]*3,ugly[times5]*5);
 		if(ugly[i] == ugly[times2]*2)
 			times2++;
