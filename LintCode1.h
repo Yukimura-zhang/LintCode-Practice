@@ -8,6 +8,8 @@
 #ifndef LINTCODE1_H_
 #define LINTCODE1_H_
 #include <iostream>
+#include <vector>
+#include <functional>
 
 /*给出两个整数a和b, 求他们的和, 但不能使用 + 等数学运算符*/
 int LintCode1(int a,int b);
@@ -22,6 +24,9 @@ int LintCode3(int n,int k);
  * 符合条件的数如：1, 2, 3, 4, 5, 6, 8, 9, 10, 12。
  * 本题中1也认为是一个丑数*/
 int LintCode4(int n);
+
+/*寻找数组中第k大元素,要求时间复杂度为O(n)，空间复杂度为O(1)*/
+int LintCode5(int k, std::vector<int> nums);
 
 
 

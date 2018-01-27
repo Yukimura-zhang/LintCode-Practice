@@ -26,9 +26,13 @@ int main(int argc,char *argv[])
 	c = LintCode4(a);
 	std::cout << "LintCode4 c = " << c << std::endl;
 
+	std::vector<int> intvec;
+	a = 12;
+	for(b = 0; b < a; b++){
+		intvec.push_back(b+1);
+	}
+	c = LintCode5(5,intvec);
+	std::cout << "LintCode5 c = " << c << std::endl;
 
 	return 0;
 }
-
-
-

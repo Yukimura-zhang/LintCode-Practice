@@ -6,9 +6,13 @@
  */
 
 #include "LintCode1.h"
+#include <set>
+
+#define ENABLE_MULTISET	(0)
 
 using namespace std;
 
+/*给出两个整数a和b, 求他们的和, 但不能使用 + 等数学运算符*/
 int LintCode1(int a,int b){
 	/*
 	 * 从二进制的角度来思考，比如a = 8(1000) b = 3(0011)：
@@ -133,7 +137,7 @@ int LintCode4(int n)
 	 * 4*2，2*3，2*5，6最小，第六个元素是6；
 	 */
 
-	auto min3 = [=](int a,int b,int c){
+	auto min3 = [](int a,int b,int c){
 		int tmp = a > b?b:a;
 		return tmp > c?c:tmp;
 	};
@@ -186,4 +190,140 @@ int LintCode4(int n)
 	return ugly[n-1];
 }
 
+/*寻找数组中第k大元素,要求时间复杂度为O(n)，空间复杂度为O(1)*/
+int LintCode5(int k, vector<int> nums)
+{
+	if(!nums.size() || static_cast<int>(nums.size()) < k)
+		return 0;
 
+#if ENABLE_MULTISET
+	/*
+	 * 利用multiset来完成的话超级简单
+	 * 它是个可以插入重复元素的有序集和，就是说插进去的数据，就已经排好序了，默认是升序
+	 * 因为是自动排序，所以元素是不支持修改的，必须先erase，再insert。
+	 *
+	 * 首先插入k个元素，此时这k个元素都是有序的，明显begin是最小的一个
+	 * 其他的元素，如果比begin大，则清除原来最小的一个(清除的同时会对k-1个元素排序，即set[0]变成原来第二小的)；
+	 * 之后再插入(插入的同时会对k个元素重新排序,set[0]是插入新元素之后最小的)；
+	 *
+	 * 如此反复，直至操作完所有元素，最后set中就是前k个大元素
+	 */
+	//multiset<int,greater<int>>set;//降序
+	multiset<int,less<int>>set;//升序，multiset<int> set;
+
+	for(int i= 0; i < static_cast<int>(nums.size()); i++) {
+		if(static_cast<int>(set.size()) < k)  {
+			set.insert(nums[i]);
+		}
+		else {
+			if(nums[i] >= *set.begin())  {
+				set.erase(*set.begin());
+				set.insert(nums[i]);
+			}
+		}
+	}
+	return *set.begin();
+#else
+	/* 快速排序
+	 * 通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，
+	 * 然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行。
+	 * 一趟快速排序的算法是：
+	 * 1）设置两个变量i、j，排序开始的时候：i=0，j=N-1；
+	 * 2）以第一个数组元素作为关键数据，赋值给key，即key=A[0]；
+	 * 3）从j开始向前搜索，即由后开始向前搜索(j--)，找到第一个小于key的值A[j]，将A[j]和A[i]互换；
+	 * 4）从i开始向后搜索，即由前开始向后搜索(i++)，找到第一个大于key的A[i]，将A[i]和A[j]互换；
+	 * 5）重复第3、4步，直到i>=j。
+	 * 快排选的key值对排序时间复杂度是有较大影响的，想一下：
+	 * 如果选中的key是最大/最小元素，一趟下来并不能把数组分成两部分，那就变成冒泡了，
+	 * 所以key值需要是一个中间值，比如高中低位的中间值。
+	 */
+
+	auto swap = [](int &a,int &b){
+		a = a + b;
+		b = a - b;
+		a = a - b;
+		/* b不能为0
+		 * a = a * b;
+		 * b = a / b;
+		 * a = a / b
+		 */
+	};
+
+	//[&]才能捕获swap
+	auto getmid = [&](vector<int> &vec,int low,int high,int mode = 0){
+		//mode 0 为升序，!0为降序
+		if(high == low){
+			return vec[low];
+		}
+		else if((high - low) == 1){
+			if(vec[low] > vec[high] && !mode)
+				swap(vec[low],vec[high]);
+			if(vec[low] < vec[high] && mode)
+				swap(vec[low],vec[high]);
+		}
+		else{
+			/*
+			 * 我们需要将的结果是vec[mid] <= vec[low] <= vec[high]
+			 * 即：把中间值放到low，这样可以不改变原来快排从low开始的基本思路
+			 */
+			int mid = low + (high - low) / 2;
+			if(vec[mid]> vec[high])
+				swap(vec[mid],vec[high]);
+			if(vec[low]> vec[high])
+				swap(vec[low],vec[high]);
+			if(vec[mid]> vec[low])
+				swap(vec[mid],vec[low]);
+		}
+		return vec[low];
+	};
+
+	/*
+	 * 错误：use of ‘qsort’ before deduction of ‘auto’*
+	 * 注意，不能再使用auto qsort = [&](vector<int> &vec,int low,int high,int mode = 0)
+	 * 因为qsort会递归调用，auto无法自动推导类型
+	 */
+	 function<void(vector<int> &,int,int,int)> qsort;
+	 qsort = [&](vector<int> &vec,int low,int high,int mode = 0){
+		//mode 0 为升序，!0为降序
+		if(low >= high)
+			return;
+
+		int first = low,last = high;
+		int key = getmid(vec,low,high,mode);
+		//元素个数小于2的情况，直接用getmid来处理，不用再排序
+		if(high - low <= 1)
+			return;
+
+		while(first < last){
+			if(!mode){//升序
+				while(first < last && vec[last] >= key){
+					last--;
+				}
+				vec[first] = vec[last];
+
+				while(first < last && vec[first] <= key){
+					first++;
+				}
+				vec[last] = vec[first];
+			}else{//降序
+				while(first < last && key >= vec[last]){
+					last--;
+				}
+				vec[first] = vec[last];
+
+				while(first < last && key <= vec[first]){
+					first++;
+				}
+				vec[last] = vec[first];
+			}
+		}
+		vec[first] = key;
+		qsort(vec,low,first -1,mode);
+		qsort(vec,first + 1,high,mode);
+	};
+
+	qsort(nums,0,nums.size()-1,1);
+
+	return nums[k-1];
+#endif
+}
