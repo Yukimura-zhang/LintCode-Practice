@@ -6,6 +6,7 @@
  */
 
 #include "LintCode1.h"
+#include "LintCode10.h"
 
 int main(int argc,char *argv[])
 {
@@ -33,6 +34,11 @@ int main(int argc,char *argv[])
 	}
 	c = LintCode5(5,intvec);
 	std::cout << "LintCode5 c = " << c << std::endl;
+
+	std::string s1("((2)){[345]}[]");
+	std::string s2("{((2)){[345]}[]");
+	std::cout << "s1 = " << s1 << LintCode423(s1) << std::endl;
+	std::cout << "s2 = " << s2 << LintCode423(s2) << std::endl;
 
 	return 0;
 }

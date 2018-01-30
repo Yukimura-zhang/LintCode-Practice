@@ -327,3 +327,20 @@ int LintCode5(int k, vector<int> nums)
 	return nums[k-1];
 #endif
 }
+
+/*
+ * 写出一个高效的算法来搜索 m × n矩阵中的值
+ * 这个矩阵具有以下特性：
+ * 每行中的整数从左到右是排序的。
+ * 每行的第一个数大于上一行的最后一个整数。
+ * */
+bool LintCode28(vector<vector<int>> &matrix, int target)
+{
+	/* 这个矩阵是排好序的
+	 * 当然可以按matrix[0][0],matrix[0][m]...matrix[n][0],matrix[n][m]来查找；
+	 * 但用二分法来查找是不是要更快点？
+	 */
+	if(!matrix.size() || !matrix[0].size())
+		return false;
+
+}

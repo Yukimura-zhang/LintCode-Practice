@@ -28,6 +28,13 @@ int LintCode4(int n);
 /*寻找数组中第k大元素,要求时间复杂度为O(n)，空间复杂度为O(1)*/
 int LintCode5(int k, std::vector<int> nums);
 
+/*
+ * 写出一个高效的算法来搜索 m × n矩阵中的值
+ * 这个矩阵具有以下特性：
+ * 每行中的整数从左到右是排序的。
+ * 每行的第一个数大于上一行的最后一个整数。
+ * */
+bool LintCode28(std::vector<std::vector<int>> &matrix, int target);
 
 
 
