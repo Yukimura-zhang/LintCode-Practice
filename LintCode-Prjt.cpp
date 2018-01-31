@@ -7,6 +7,7 @@
 
 #include "LintCode1.h"
 #include "LintCode10.h"
+#include "minstack.h"
 
 int main(int argc,char *argv[])
 {
@@ -39,6 +40,31 @@ int main(int argc,char *argv[])
 	std::string s2("{((2)){[345]}[]");
 	std::cout << "s1 = " << s1 << LintCode423(s1) << std::endl;
 	std::cout << "s2 = " << s2 << LintCode423(s2) << std::endl;
+
+
+	//得到一个4行7列的数组
+	//由vector实现的二维数组，可以通过resize()的形式改变行、列值
+	std::vector<std::vector<int>> array(4);
+	for (auto i = array.begin(); i != array.end(); i++)
+		(*i).resize(7);
+
+	for(a = 0; a < 4; a++){
+		for(b = 0; b < 7; b++)
+			array[a][b] = a*b;
+	}
+	std::cout << "array[2][2] = " << array[2][2] << std::endl;
+	std::cout << " LintCode28(array,10000) =  "
+			<< LintCode28(array,10000) << std::endl;
+	std::cout << " LintCode28(array,array[2][2]) =  "
+			<< LintCode28(array,array[2][2]) << std::endl;
+
+	minstack mstack;
+	for(a = 0; a < 9; a++){
+		mstack.push(a);
+	}
+	std::cout << " LintCode12() size = " << mstack.size() << std::endl;
+	std::cout << " LintCode12() min = " << mstack.min() << std::endl;
+	std::cout << " LintCode12() top = " << mstack.top() << std::endl;
 
 	return 0;
 }

@@ -343,4 +343,27 @@ bool LintCode28(vector<vector<int>> &matrix, int target)
 	if(!matrix.size() || !matrix[0].size())
 		return false;
 
+	int n = matrix.size(),m = matrix[0].size();
+	int mid = 0,x = 0,y = 0;
+	int start = 0, end = n*m -1;
+
+	while(start <= end){
+		/*
+		 * 先确定中间位置，在确定中间位置在哪一行，哪一列
+		 * 试想一下，在一个8*9的二维数组中，第34号元素在哪一行哪一列？
+		 * 一行9个元素,34在[3][6]
+		 */
+		mid = start + (end - start)/2;
+		x = mid / m;
+		y = mid - m*x;
+		if(matrix[x][y] == target)
+			return true;
+		else if(matrix[x][y] > target){
+			end = mid - 1;
+		}else{
+			start = mid + 1;
+		}
+	}
+
+	return false;
 }
