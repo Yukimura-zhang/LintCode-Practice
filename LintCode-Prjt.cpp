@@ -66,5 +66,11 @@ int main(int argc,char *argv[])
 	std::cout << " LintCode12() min = " << mstack.min() << std::endl;
 	std::cout << " LintCode12() top = " << mstack.top() << std::endl;
 
+	std::cout << "abccfcab, cfc " << LintCode13("abccfcab", "cfc") << std::endl;
+	std::cout << "abccfcab, cab " << LintCode13("abccfcab", "cab") << std::endl;
+	std::cout << "source, target " << LintCode13("source", "target") << std::endl;
+	std::cout << "abcdabcdefg, bcd " << LintCode13("abcdabcdefg", "bcd") << std::endl;
+	std::cout << ",  " << LintCode13("", "") << std::endl;
+
 	return 0;
 }

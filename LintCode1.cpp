@@ -367,3 +367,47 @@ bool LintCode28(vector<vector<int>> &matrix, int target)
 
 	return false;
 }
+
+/*
+ * 对于一个给定的 source 字符串和一个 target 字符串,
+ * 你应该在 source 字符串中找出 target字符串出现的第一个位置(从0开始)。
+ * 如果不存在，则返回 -1。
+ * 即：实现一个strstr
+ */
+int LintCode13(const char *source, const char *target)
+{
+#if 1
+	//传统方法
+	int i = 0,j = 0;
+
+	if(!source || !target)
+		return -1;
+	//tagget为"\0"时算匹配上
+		if(target[0] == '\0')
+			return 0;
+
+	while(source[i] != '\0'){
+		if(source[i] == target[j]){
+			i++;
+			j++;
+			if(target[j] == '\0')
+				return i -j;
+		}else{
+			if(!j){
+				/*
+				 * 当j为不0时，说明i已经++过了，但是source[i]和target[j]没有匹配上；
+				 * 所以需要用source[i]和target[0]重新开始比较；
+				 * 如果j不为0时，i++,就会跳过一些元素。
+				 * 可以参考例子：abccfcab，cfc
+				 * */
+				i++;
+			}
+			j = 0;
+		}
+	}
+
+	return -1;
+#else
+
+#endif
+}

@@ -36,6 +36,14 @@ int LintCode5(int k, std::vector<int> nums);
  * */
 bool LintCode28(std::vector<std::vector<int>> &matrix, int target);
 
+/*
+ * 对于一个给定的 source 字符串和一个 target 字符串,
+ * 你应该在 source 字符串中找出 target字符串出现的第一个位置(从0开始)。
+ * 如果不存在，则返回 -1。
+ * 即：实现一个strstr
+ */
+int LintCode13(const char *source, const char *target);
+
 
 
 #endif /* LINTCODE1_H_ */
