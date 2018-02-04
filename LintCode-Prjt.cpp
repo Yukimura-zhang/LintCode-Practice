@@ -71,6 +71,8 @@ int main(int argc,char *argv[])
 	std::cout << "source, target " << LintCode13("source", "target") << std::endl;
 	std::cout << "abcdabcdefg, bcd " << LintCode13("abcdabcdefg", "bcd") << std::endl;
 	std::cout << ",  " << LintCode13("", "") << std::endl;
+	std::cout << "abcdabcdefg, e " << LintCode13("abcdabcdefg", "e") << std::endl;
+	std::cout << "abcdabcdefg, fg " << LintCode13("abcdabcdefg", "fg") << std::endl;
 
 	return 0;
 }

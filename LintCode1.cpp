@@ -7,6 +7,7 @@
 
 #include "LintCode1.h"
 #include <set>
+#include <cstring>
 
 #define ENABLE_MULTISET	(0)
 
@@ -376,15 +377,14 @@ bool LintCode28(vector<vector<int>> &matrix, int target)
  */
 int LintCode13(const char *source, const char *target)
 {
-#if 1
-	//传统方法
-	int i = 0,j = 0;
-
 	if(!source || !target)
 		return -1;
 	//tagget为"\0"时算匹配上
-		if(target[0] == '\0')
-			return 0;
+	if(target[0] == '\0')
+		return 0;
+#if 0
+	//传统方法
+	int i = 0,j = 0;
 
 	while(source[i] != '\0'){
 		if(source[i] == target[j]){
@@ -408,6 +408,73 @@ int LintCode13(const char *source, const char *target)
 
 	return -1;
 #else
+	/*  KMP算法
+	 * 这是一种在不匹配时，保持主串游标不回溯，改变目标串游标来快速匹配的算法。
+	 * 比如srouce="ababcababdf",target="ababd"，在srouce[4]出现不匹配时，
+	 * 其实不用回溯到source[1]和target[0],只需要从srouce[4]和target[2]，这是为什么？
+	 * 因为target[4]前有最长相同前后缀“ab”，之前能够匹配上则"ab"是一定匹配上的
+	 * ababcababdf
+	 *   ababd
+	 */
 
+	/*
+	 * next函数来填充next_arr数组，next_arr长度为strlen(target);
+	 * next_arr中记录的是target串中第j位前最长前缀和最长后缀相同的长度，
+	 * 也就是source[i]与target[j]不匹配时，target应该移动的长度
+	 */
+	auto next = [](const char *target,int len ,int *next_arr){
+		/*
+		 * [0]前没有字符所以是0，[1]不存在前后缀所以也是0
+		 * 计算的时候不能包含当前位,所以只算到[len-1]
+		*/
+		next_arr[0] = next_arr[1] = 0;
+		int k = 0;//k初始化为0，代表最大相同前后缀的长度，也是从最前面开始，可以匹配的游标
+		for (int q = 2; q <= len-1; q++)
+		{
+			while (k && (target[k] != target[q-1])){
+				/*
+				 * 往前回溯，这个地方特别不好理解，我们这样想：
+				 * 假如上一个循环得k=3,即：next_arr[q-1]=3（因为q++了，所以上一个循环应是q-1）;
+				 * 也就是说target[k-1] == target[q-2]，target[k-2] == target[q-3]，target[k-3] == target[q-4]，
+				 * 也就是说，除开target[k] 和 target[q-1]，之前的匹配都是成立的；
+				 * 现在target[k] 和 target[q-1]不相等了，我们就要把k回退，退到到上一个已经匹配的位置，再与target[q-1]作比较
+				 * */
+				k = next_arr[k];
+			}
+			if (target[k] == target[q-1]){
+				/*
+				 * 为什么只比较一次就要k++?
+				 * 因为前一个前面的元素已经比较过了，如果不相等，k会被回溯的
+				 */
+				k++;
+			}
+			next_arr[q] = k;
+		}
+	};
+
+	int len1 = strlen(target),len2 = strlen(source);
+	int *next_arr = new int [len1];
+	next(target,len1,next_arr);
+	int k = 0;
+
+	for (int i = 0; i < len2; i++)
+	{
+		while(k && target[k] != source[i])
+			k = next_arr[k];
+		if(target[k] == source[i])
+			k++;
+		if(k == len1){//匹配的个数已经等于target的长度
+			//此时source[i]已经走到了和target匹配的最后一个元素，而我们要求的是匹配的起始位置
+			return i-(len1-1);
+			/*
+			 * 如果需要算个数的话，应该是：
+			 * count++;
+			 * i = (i - (len1 -1)) + 1;
+			 * continue;
+			 * */
+		}
+	}
+
+	return -1;
 #endif
 }
