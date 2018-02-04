@@ -478,3 +478,49 @@ int LintCode13(const char *source, const char *target)
 	return -1;
 #endif
 }
+
+//给定一个数字列表，返回其所有可能的排列
+vector<vector<int>> LintCode15(vector<int> &nums)
+{
+	vector<vector<int>> out(nums.size());
+	if(!nums.size()){
+		out.push_back(nums);
+		return out;
+	}
+
+	auto swap = [](int &a,int &b){
+		a = a + b;
+		b = a - b;
+		a = a - b;
+	};
+
+	auto doswap = [](vector<int> &nums,int pos){
+		for(int i=pos;i < static_cast<int>(nums.size());i++){
+			if(nums[nums.size() -1 ] == nums[i]){
+				return false;
+			}
+		}
+		return true;
+	};
+
+	function<void(vector<vector<int>> &,vector<int> &,int)> permute;
+	permute = [&](vector<vector<int>> &out,vector<int> &nums,int pos){
+		//pos是游标，表示用num[pos]作为首元素
+		int size = nums.size();
+		if(pos > size -1){
+			out.push_back(nums);
+		}else{
+			for(int i = pos; i < size; i++){
+				if(doswap(nums,i) == true){
+					swap(nums[pos],nums[i]);
+					permute(out,nums,pos + 1);
+					swap(nums[pos],nums[i]);
+				}
+			}
+		}
+	};
+
+	permute(out,nums,0);
+
+	return out;
+}

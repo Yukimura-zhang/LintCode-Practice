@@ -44,6 +44,8 @@ bool LintCode28(std::vector<std::vector<int>> &matrix, int target);
  */
 int LintCode13(const char *source, const char *target);
 
+//给定一个数字列表，返回其所有可能的排列
+std::vector<std::vector<int>> LintCode15(std::vector<int> &nums);
 
 
 #endif /* LINTCODE1_H_ */

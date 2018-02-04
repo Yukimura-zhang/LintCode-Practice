@@ -74,5 +74,20 @@ int main(int argc,char *argv[])
 	std::cout << "abcdabcdefg, e " << LintCode13("abcdabcdefg", "e") << std::endl;
 	std::cout << "abcdabcdefg, fg " << LintCode13("abcdabcdefg", "fg") << std::endl;
 
+	{
+		std::vector<int> tempvec;
+		for(int i = 1; i < 4 ;i++){
+			tempvec.push_back(i);
+		}
+		auto r = LintCode15(tempvec);
+		std::cout << "LintCode15(tempvec):" << std::endl;
+		for(auto r1 = r.begin(); r1 != r.end(); r1++){
+			for(auto r2 = (*r1).begin(); r2 != (*r1).end(); r2++){
+				std::cout << (*r2) << " ";
+			}
+			std::cout << std::endl;
+		}
+	}
+
 	return 0;
 }
