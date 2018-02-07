@@ -482,7 +482,7 @@ int LintCode13(const char *source, const char *target)
 //给定一个数字列表，返回其所有可能的排列
 vector<vector<int>> LintCode15(vector<int> &nums)
 {
-	vector<vector<int>> out(nums.size());
+	vector<vector<int>> out;
 	if(!nums.size()){
 		out.push_back(nums);
 		return out;
@@ -494,9 +494,10 @@ vector<vector<int>> LintCode15(vector<int> &nums)
 		a = a - b;
 	};
 
-	auto doswap = [](vector<int> &nums,int pos){
-		for(int i=pos;i < static_cast<int>(nums.size());i++){
-			if(nums[nums.size() -1 ] == nums[i]){
+	auto doswap = [](vector<int> &nums,int pos1,int pos2){
+		//pos1是固定位置
+		for(int i = pos1;i < pos2;i++){
+			if(nums[i] == nums[pos2]){
 				return false;
 			}
 		}
@@ -505,16 +506,21 @@ vector<vector<int>> LintCode15(vector<int> &nums)
 
 	function<void(vector<vector<int>> &,vector<int> &,int)> permute;
 	permute = [&](vector<vector<int>> &out,vector<int> &nums,int pos){
-		//pos是游标，表示用num[pos]作为首元素
+		//pos是游标，表示固定哪一位
 		int size = nums.size();
-		if(pos > size -1){
+		if(pos == size -1){
 			out.push_back(nums);
 		}else{
 			for(int i = pos; i < size; i++){
-				if(doswap(nums,i) == true){
-					swap(nums[pos],nums[i]);
+				if(doswap(nums,pos,i) == true){
+					/*为什么i不能等于pos?
+					 *因为我们是没有空间开销的加法swap，相当于两个参数是同一个引用，这样最后会变成0
+					 */
+					if(i != pos)
+						swap(nums[pos],nums[i]);
 					permute(out,nums,pos + 1);
-					swap(nums[pos],nums[i]);
+					if(i != pos)
+						swap(nums[pos],nums[i]);
 				}
 			}
 		}
