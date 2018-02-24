@@ -91,5 +91,23 @@ int main(int argc,char *argv[])
 		}
 	}
 
+	{
+		std::vector<int> tempvec;
+		for(int i = 0; i <  5;i++){
+			if(i == 3)
+				tempvec.push_back(1);
+			else
+				tempvec.push_back(4);
+		}
+		auto r = LintCode18(tempvec);
+		std::cout << "LintCode18(tempvec):"<< std::endl;
+		for(auto r1 = r.begin(); r1 != r.end(); r1++){
+			for(auto r2 = (*r1).begin(); r2 != (*r1).end(); r2++){
+				std::cout << (*r2) << " ";
+			}
+			std::cout << std::endl;
+		}
+	}
+
 	return 0;
 }

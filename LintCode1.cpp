@@ -8,6 +8,7 @@
 #include "LintCode1.h"
 #include <set>
 #include <cstring>
+#include <algorithm>
 
 #define ENABLE_MULTISET	(0)
 
@@ -529,4 +530,40 @@ vector<vector<int>> LintCode15(vector<int> &nums)
 	permute(out,nums,0);
 
 	return out;
+}
+
+//给定一个可能具有重复数字的列表，返回其所有可能的子集
+vector<vector<int>> LintCode18(vector<int> &nums)
+{
+	/*
+	 * 拷贝构造一个sort_nums,再利用sort来排序;
+	 * 这样sort_nums中的元素就和nums中相同,同时又是排好序的
+	 * 排序之后,相等的数字会相邻
+	 */
+	vector<int> sort_nums(nums);
+	sort(sort_nums.begin(),sort_nums.end());
+	vector<vector<int>> ret_nums;
+	vector<int> path;
+
+	/*
+	 * 转化成DFS问题，即：
+	 * [1]-->[1,2]-->[1,2,3]
+	 * [2]-->[2,3]
+	 * [3]
+	 * */
+	function<void(vector<int>::iterator, vector<int> &)> dfs;
+	dfs = [&](vector<int>::iterator start, vector<int> & tmp){
+		ret_nums.emplace_back(tmp);
+		for (auto i = start; i < sort_nums.end(); i++) {
+			if (i != start && *i == *(i - 1))
+				continue;
+
+			tmp.emplace_back(*i);
+			dfs(i + 1, tmp);
+			tmp.pop_back();
+		}
+	};
+	dfs(sort_nums.begin(), path);
+
+	return ret_nums;
 }

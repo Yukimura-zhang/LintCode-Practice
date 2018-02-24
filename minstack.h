@@ -16,7 +16,7 @@ public:
 	minstack();
 	virtual ~minstack();
 	void push(int number);
-	void pop();
+	int pop();
 	int min();
 
 	int top();

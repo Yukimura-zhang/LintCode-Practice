@@ -36,12 +36,14 @@ void minstack::push(int number)
 	}
 }
 
-void minstack::pop()
+int minstack::pop()
 {
-	if(stack_helper->top() == stack_main->top())
+	int top = stack_main->top();
+	if(stack_helper->top() == top)
 		stack_helper->pop();
 
 	stack_main->pop();
+	return top;
 }
 
 int minstack::min()
